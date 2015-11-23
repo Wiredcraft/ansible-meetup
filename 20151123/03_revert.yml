@@ -1,0 +1,35 @@
+---
+# We're reverting the config so www points at web1
+
+- hosts: lb
+  user: root
+  roles:
+    - role: haproxy
+      haproxy_frontends:
+        - name: default
+          bind: '*:80'
+          acl:
+            - name: www
+              condition: hdr(host) -i www.ansible-meetup.wiredcraft.net
+            - name: orig
+              condition: hdr(host) -i orig.ansible-meetup.wiredcraft.net
+            - name: new
+              condition: hdr(host) -i new.ansible-meetup.wiredcraft.net
+          backends:
+            - name: web1
+              condition: if www
+            - name: web1
+              condition: if orig
+            - name: web2
+              condition: if new
+      haproxy_backends:
+        - name: web1
+          servers:
+          - name: web1
+            ip: "{{ hostvars['web1']['ansible_eth0']['ipv4']['address'] }}"
+            port: 8080
+        - name: web2
+          servers:
+          - name: web2
+            ip: "{{ hostvars['web2']['ansible_eth0']['ipv4']['address'] }}"
+            port: 8080
