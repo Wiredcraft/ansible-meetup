@@ -1,5 +1,6 @@
 ---
 # We're reverting the config so www points at web1
+- include: ping.yml
 
 - hosts: lb
   user: root

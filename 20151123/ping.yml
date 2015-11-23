@@ -1,0 +1,6 @@
+---
+- hosts: all
+  user: root
+  tasks:
+    - name: ping to populate the ansible facts
+      ping: {}

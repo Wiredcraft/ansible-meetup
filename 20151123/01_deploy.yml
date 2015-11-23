@@ -1,5 +1,6 @@
 ---
 # We're deploying the new web on web2 and setting up the new domains orig. and new.
+- include: ping.yml
 
 - hosts: web2
   user: root
