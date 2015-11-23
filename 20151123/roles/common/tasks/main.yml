@@ -1,0 +1,13 @@
+---
+# tasks file for common
+- name: Setup hostname
+  hostname:
+    name={{ inventory_hostname }}
+
+- name: Install some packages
+  apt:
+    name={{ item }}
+    state=present
+  with_items:
+    - htop
+    - git
