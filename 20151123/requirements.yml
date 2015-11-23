@@ -1,5 +1,5 @@
 # Install a role from the Ansible Galaxy
 - src: jdauphant.nginx
   name: nginx
-- src: kefniark.haproxy
+- src: kefniark.haproxy-role
   name: haproxy
