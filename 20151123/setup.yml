@@ -18,11 +18,20 @@
             - index index.html
 
   tasks:
+    - name: Prepare html folder
+      file:
+        name=/var/www/site
+        owner=www-data
+        group=www-data
+        mode=755
+        state=directory
     - name: Copy content to nginx folder
       template:
         src=index.orig.html.j2
         dest=/var/www/site/index.html
-        state=present
+        owner=www-data
+        group=www-data
+
 
 
 # Install haproxy
@@ -33,14 +42,15 @@
       haproxy_frontends:
         - name: default
           bind: '*:80'
-          default_backend: 
+          default_backend: webserver
       haproxy_backends:
         - name: webserver
+          balance: roundrobin
           servers:
           - name: web1
-            ip: host_vars['web1']['ansible_eth0']['ipv4']['address']
+            ip: "{{ hostvars['web1']['ansible_eth0']['ipv4']['address'] }}"
             port: 8080
           - name: web2
-            ip: host_vars['web2']['ansible_eth0']['ipv4']['address']
+            ip: "{{ hostvars['web2']['ansible_eth0']['ipv4']['address'] }}"
             port: 8080
 
